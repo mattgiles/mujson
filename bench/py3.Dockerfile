@@ -2,7 +2,7 @@ FROM alpine:3.7
 
 ENV BUILD_PKGS="g++ git musl-dev python3-dev yajl-dev" \
     RUNTIME_PKGS="python3 yajl gcc" \
-    PIP_PKGS_COMPILE="ujson simplejson python-rapidjson yajl metamagic.json nssjson"
+    PIP_PKGS_COMPILE="ujson simplejson python-rapidjson yajl metamagic.json nssjson mujson"
 
 RUN \
   apk add --no-cache --virtual .build-deps $BUILD_PKGS && \
@@ -12,11 +12,9 @@ RUN \
   python3 -m ensurepip && rm -r /usr/lib/python*/ensurepip && \
   ln -s pip3 /usr/bin/pip && ln -sf /usr/bin/python3 /usr/bin/python
 
-COPY . /opt/mujson
+COPY . /opt/bench
 
-RUN pip install -e /opt/mujson
-
-WORKDIR /opt/mujson/bench
+WORKDIR /opt/bench
 
 ENTRYPOINT ["python", "bench3.py"]
 

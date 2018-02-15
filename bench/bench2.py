@@ -3,6 +3,9 @@ import sys
 from timeit import Timer
 
 
+_import_tpl = 'from {} import ({} as loads, {} as dumps)'
+
+
 _bin_tmpl = "bin = open('json/{}', 'rb').read()"
 
 
@@ -13,13 +16,13 @@ _warm_up = "loads(dumps([]))"
 
 
 decode_tests = [
-    ('json', 'loads'),
-    ('yajl', 'loads'),
-    ('nssjson', 'loads'),
-    ('simplejson', 'loads'),
-    ('cjson', 'decode'),
-    ('ujson', 'loads'),
-    ('mujson', 'loads')
+    ('json', 'loads', 'dumps'),
+    ('yajl', 'loads', 'dumps'),
+    ('nssjson', 'loads', 'dumps'),
+    ('simplejson', 'loads', 'dumps'),
+    ('cjson', 'decode', 'encode'),
+    ('ujson', 'loads', 'dumps'),
+    ('mujson', 'loads', 'dumps')
 ]
 
 
@@ -66,23 +69,19 @@ def timeit(module, action, num, jsn, import_stmt):
 def main(number, jsn):
     print('\n' + '*' * 75 + '\n')
 
-    for mod, dec in decode_tests:
-        import_stmt = 'from {} import {} as loads'.format(mod, dec)
-        timeit(mod, 'decoded', number, jsn, import_stmt)
+    for mod, dec, enc in decode_tests:
+        timeit(mod, 'decoded', number, jsn, _import_tpl.format(mod, dec, enc))
 
     print('\n' + '*' * 75 + '\n')
 
     for mod, dec, enc in encode_tests:
-        import_stmt = (
-            'from {} import ({} as loads, {} as dumps)'.format(mod, dec, enc))
-        timeit(mod, 'encoded', number, jsn, import_stmt)
+        timeit(mod, 'encoded', number, jsn, _import_tpl.format(mod, dec, enc))
 
     print('\n' + '*' * 75 + '\n')
 
     for mod, dec, enc in decode_encode_tests:
-        import_stmt = (
-            'from {} import ({} as loads, {} as dumps)'.format(mod, dec, enc))
-        timeit(mod, 'de/encoded', number, jsn, import_stmt)
+        timeit(
+            mod, 'de/encoded', number, jsn, _import_tpl.format(mod, dec, enc))
 
     print('\n' + '*' * 75 + '\n')
 

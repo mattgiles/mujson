@@ -3,6 +3,9 @@ import sys
 from timeit import Timer
 
 
+_import_tpl = 'from {} import (dumps, loads)'
+
+
 _bin_tmpl = "bin = open('json/{}', 'rb').read()"
 
 
@@ -66,20 +69,17 @@ def main(number, jsn):
     print('\n' + '*' * 75 + '\n')
 
     for mod in decode_tests:
-        import_stmt = f'from {mod} import loads'
-        timeit(mod, 'decoded', number, jsn, import_stmt)
+        timeit(mod, 'decoded', number, jsn, _import_tpl.format(mod))
 
     print('\n' + '*' * 75 + '\n')
 
     for mod in encode_tests:
-        import_stmt = f'from {mod} import (dumps, loads)'
-        timeit(mod, 'encoded', number, jsn, import_stmt)
+        timeit(mod, 'encoded', number, jsn, _import_tpl.format(mod))
 
     print('\n' + '*' * 75 + '\n')
 
     for mod in decode_encode_tests:
-        import_stmt = f'from {mod} import (loads, dumps)'
-        timeit(mod, 'de/encoded', number, jsn, import_stmt)
+        timeit(mod, 'de/encoded', number, jsn, _import_tpl.format(mod))
 
     print('\n' + '*' * 75 + '\n')
 
