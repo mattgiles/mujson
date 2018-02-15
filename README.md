@@ -1,6 +1,6 @@
 # mujson
 
-`mujson` lets python libraries make use of the most performant JSON functions available at import time. It does not itself implement any encoding or decoding functionality.
+`mujson` lets python libraries make use of the most performant JSON functions available at import time. It is small, and does not itself implement any encoding or decoding functionality.
 
 ## installation
 
