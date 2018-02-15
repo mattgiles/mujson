@@ -9,6 +9,9 @@ _bin_tmpl = "bin = open('json/{}', 'rb').read()"
 _obj = "obj = loads(bin)"
 
 
+_warm_up = "loads(dumps([]))"
+
+
 decode_tests = [
     ('json', 'loads'),
     ('yajl', 'loads'),
@@ -50,7 +53,7 @@ actions = {
 
 
 def timeit(module, action, num, jsn, import_stmt):
-    setup = [import_stmt, _bin_tmpl.format(jsn), _obj]
+    setup = [import_stmt, _warm_up, _bin_tmpl.format(jsn), _obj]
     try:
         result = Timer(actions[action], '; '.join(setup)).timeit(num) * 1000
         print('{:25s} {} {} {} times in {} milliseconds.'.format(
@@ -64,24 +67,21 @@ def main(number, jsn):
     print('\n' + '*' * 75 + '\n')
 
     for mod, dec in decode_tests:
-        import_stmt = 'from {} import {} as loads; loads("[]")' \
-            .format(mod, dec)
+        import_stmt = 'from {} import {} as loads'.format(mod, dec)
         timeit(mod, 'decoded', number, jsn, import_stmt)
 
     print('\n' + '*' * 75 + '\n')
 
     for mod, dec, enc in encode_tests:
         import_stmt = (
-            'from {} import ({} as loads, {} as dumps); '
-            'dumps([])'.format(mod, dec, enc))
+            'from {} import ({} as loads, {} as dumps)'.format(mod, dec, enc))
         timeit(mod, 'encoded', number, jsn, import_stmt)
 
     print('\n' + '*' * 75 + '\n')
 
     for mod, dec, enc in decode_encode_tests:
         import_stmt = (
-            'from {} import ({} as loads, {} as dumps); '
-            'loads(dumps([]))'.format(mod, dec, enc))
+            'from {} import ({} as loads, {} as dumps)'.format(mod, dec, enc))
         timeit(mod, 'de/encoded', number, jsn, import_stmt)
 
     print('\n' + '*' * 75 + '\n')

@@ -1,1 +1,6 @@
-.vscode/settings.json
+*.pyc
+
+.vscode/*
+build/*
+dist/*
+mujson.egg-info/*

@@ -9,6 +9,9 @@ _bin_tmpl = "bin = open('json/{}', 'rb').read()"
 _obj = "obj = loads(bin)"
 
 
+_warm_up = "loads(dumps([]))"
+
+
 decode_tests = [
     'rapidjson',
     'simplejson',
@@ -51,7 +54,7 @@ actions = {
 
 
 def timeit(mod, act, num, jsn, import_stmt):
-    setup = [import_stmt, _bin_tmpl.format(jsn), _obj]
+    setup = [import_stmt, _warm_up, _bin_tmpl.format(jsn), _obj]
     try:
         msecs = Timer(actions[act], '; '.join(setup)).timeit(num) * 1000
         print(f'{mod:15s} {act} {jsn} {num} times in {msecs} milliseconds!')
@@ -63,19 +66,19 @@ def main(number, jsn):
     print('\n' + '*' * 75 + '\n')
 
     for mod in decode_tests:
-        import_stmt = f'from {mod} import loads; loads("[]")'
+        import_stmt = f'from {mod} import loads'
         timeit(mod, 'decoded', number, jsn, import_stmt)
 
     print('\n' + '*' * 75 + '\n')
 
     for mod in encode_tests:
-        import_stmt = f'from {mod} import (dumps, loads); dumps([])'
+        import_stmt = f'from {mod} import (dumps, loads)'
         timeit(mod, 'encoded', number, jsn, import_stmt)
 
     print('\n' + '*' * 75 + '\n')
 
     for mod in decode_encode_tests:
-        import_stmt = f'from {mod} import (loads, dumps); loads(dumps([]))'
+        import_stmt = f'from {mod} import (loads, dumps)'
         timeit(mod, 'de/encoded', number, jsn, import_stmt)
 
     print('\n' + '*' * 75 + '\n')
