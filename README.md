@@ -58,27 +58,28 @@ logger.addHandler(logHandler)
 
 `mujson`'s default rankings are scoped to function (e.g. `loads`) and python version. They are based on benchmarked performance of different JSON libraries encoding and decoding the twitter data at [`bench/json/tweet.json`](bench/json/tweet.json).
 
-### python 3
-
-``` python
-DEFAULT_RANKINGS = {
-    'dump': [mjson, rapidjson, ujson, yajl, json, nssjson, simplejson],
-    'dumps': [mjson, rapidjson, ujson, yajl, json, nssjson, simplejson],
-    'load': [ujson, yajl, json, nssjson, simplejson, rapidjson],
-    'loads': [ujson, yajl, json, nssjson, simplejson, rapidjson]
-}
-```
-
 ### python 2
 
-``` python
-DEFAULT_RANKINGS = {
-    'dump': [ujson, yajl, json, cjson, nssjson, simplejson],
-    'dumps': [ujson, yajl, json, cjson, nssjson, simplejson],
-    'load': [ujson, cjson, simplejson, nssjson, yajl, json],
-    'loads': [ujson, cjson, simplejson, nssjson, yajl, json]
-}
-```
+| library    | dumps | loads |
+|------------|:-----:|:-----:|
+| ujson      |  1st  |  1st  |
+| cjson      |  2nd  |  4th  |
+| simplejson |  3rd  |  6th  |
+| nssjson    |  4th  |  5th  |
+| yajl       |  5th  |  2nd  |
+| json       |  6th  |  3rd  |
+
+### python 3
+
+| library        | dumps | loads |
+|----------------|:-----:|:-----:|
+| metamagic.json |  1st  |       |
+| rapidjson      |  2nd  |  6th  |
+| ujson          |  3rd  |  1st  |
+| yajl           |  4th  |  2nd  |
+| json           |  5th  |  3rd  |
+| simplejson     |  6th  |  5th  |
+| nssjson        |  7th  |  4th  |
 
 ## running benchmarks
 
@@ -126,8 +127,3 @@ mujson          de/encoded apache.json 1000 times in 1608.914870001172 milliseco
 
 ***************************************************************************
 ```
-
-## todo
-
-- provide more context on benchmarks
-- implement checks at import time to see if libraries with optional speedups were successfully installed with speedups in place, as that impacts the assumptions behind the default rankings.
