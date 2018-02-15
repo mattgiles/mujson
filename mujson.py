@@ -22,13 +22,21 @@ except ImportError:
 
 try:
     import simplejson  # https://github.com/simplejson/simplejson
+    if simplejson.encoder.c_make_encoder:
+        simplejson_slow = False
+    else:
+        simplejson_slow, simplejson = simplejson, False
 except ImportError:
-    simplejson = False
+    simplejson = simplejson_slow = False
 
 try:
     import nssjson  # https://github.com/lelit/nssjson
+    if nssjson.encoder.c_make_encoder:
+        nssjson_slow = False
+    else:
+        nssjson_slow, nssjson = nssjson, False
 except ImportError:
-    nssjson = False
+    nssjson = nssjson_slow = False
 
 try:
     import yajl  # https://github.com/rtyler/py-yajl
@@ -51,17 +59,17 @@ except ImportError:
 if sys.version_info.major == 3:
     basestring = str
     DEFAULT_RANKINGS = {
-        'dump': [rapidjson, ujson, yajl, json, nssjson, simplejson],
-        'dumps': [mjson, rapidjson, ujson, yajl, json, nssjson, simplejson],
-        'load': [ujson, yajl, json, nssjson, simplejson, rapidjson],
-        'loads': [ujson, yajl, json, nssjson, simplejson, rapidjson]}
+        'dump': [rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'dumps': [mjson, rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'load': [ujson, yajl, json, nssjson, simplejson, rapidjson, nssjson_slow, simplejson_slow],
+        'loads': [ujson, yajl, json, nssjson, simplejson, rapidjson, nssjson_slow, simplejson_slow]}
 
 else:
     DEFAULT_RANKINGS = {
-        'dump': [ujson, yajl, json, cjson, nssjson, simplejson],
-        'dumps': [ujson, yajl, json, cjson, nssjson, simplejson],
-        'load': [ujson, cjson, simplejson, nssjson, yajl, json],
-        'loads': [ujson, cjson, simplejson, nssjson, yajl, json]}
+        'dump': [ujson, yajl, json, cjson, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'dumps': [ujson, yajl, json, cjson, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'load': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow],
+        'loads': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow]}
 
 
 def _best_available_json_func(func_name, ranking, **kwargs):
