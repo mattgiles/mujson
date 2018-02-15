@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
 import collections
 import inspect
 import json
 import sys
+
+
+__version__ = '0.1'
 
 
 SUPPORTED_FUNCS = ['loads', 'load', 'dumps', 'dump']
@@ -101,10 +105,10 @@ def _best_available_json_func(func_name, ranking, **kwargs):
     raise TypeError('mujson {}() got an unexpected kwarg'.format(func_name))
 
 
-def mujson_function(name, alias_for=None, ranking=['json']):
-    """Find the "best" available version of some json function.
+def mujson_function(name, alias_for=None, ranking=None):
+    """Return the "best" available version of some JSON function.
 
-    The true performance ranking of different json libraries varies widely
+    The true performance ranking of different JSON libraries varies widely
     based on the actual JSON data being encoded or decoded. Therefore, it may
     be desirable to pass your own `ranking` based on your knowledge of the
     common shape or characteristics of the JSON data relevant to your project.
@@ -144,6 +148,12 @@ def mujson_function(name, alias_for=None, ranking=['json']):
         raise ValueError(
             '`alias_for` must be one of: {}'.format(SUPPORTED_FUNCS))
 
+    if ranking is None:
+        ranking = DEFAULT_RANKINGS[alias_for]
+
+    if 'json' not in ranking:
+        ranking.append('json')
+
     def temp_json_func(*args, **kwargs):
         func = _best_available_json_func(alias_for, ranking, **kwargs)
         globals()[name] = func
@@ -161,15 +171,12 @@ load = mujson_function('load', ranking=DEFAULT_RANKINGS['load'])
 loads = mujson_function('loads', ranking=DEFAULT_RANKINGS['loads'])
 
 
-# NOTE(mattgiles): there is here implemented an expected use case for only
-# those json libraries whose functions are "compliant" with the signatures
-# of corresponding functions in the standard library.
-# NOTE(mattgiles): Users of mujson can elect to explicitly import `compliant_*`
+# NOTE(mattgiles): programmers can elect to explicitly import `compliant_*`
 # versions of the standard functions to avoid run time errors that depend on
 # what concrete uses of e.g. `mujson.dumps` hit `mujson_function:temp_json_func`
 # first. Although `mujson_function` guarantees that the first time it is called
 # it protects against choosing a JSON library which does not support invoked
-# kwargs, this DYNAMIC behavior can lead to NON-DETERMINISTIC behavior in
+# kwargs, this dynamic behavior can lead to NON-DETERMINISTIC behavior in
 # larger or more complex libraries where mujson is used multiple places with
 # varying signatures.
 NON_COMPLIANT = [ujson, cjson, mjson]

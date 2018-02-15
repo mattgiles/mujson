@@ -4,11 +4,11 @@
 
 ## rationale
 
-JSON decoding and encoding is a common application bottleneck, and a variety of "fast" substitutes for the standard library's `json` exist, typically implemented in C. This is great for applications which can fine tune their dependency trees, but third party libraries are often forced to rely on the standard library so as to avoid superfluous or expensive dependencies.
+JSON decoding and encoding is a common application bottleneck, and a variety of "fast" substitutes for the standard library's `json` exist, typically implemented in C. This is great for projects which can fine tune their dependency trees, but third party libraries are often forced to rely on the standard library so as to avoid superfluous or expensive dependencies.
 
-The situation is sufficiently frustrating that it is common for third party libraries to use `try... except` logic around imports, hoping to find some better third party JSON library available. But even that approach is sub-optimal. In fact, the relative performance of different JSON libraries varies between encoding and decoding activities, as well as between Python 2.x and Python 3.x environments.
+It is common for libraries to use `try... except` logic around imports, hoping to find some better JSON implementation available. But this approach is sub-optimal. There are many python JSON libraries, and the relative performance of these varies between encoding and decoding, as well as between Python 2 and 3.
 
-`mujson` is designed to let libraries simply ask for whatever the most performant json functions available are at import time. Library owners are also given the option to specify what JSON implementations are most proficient for their purposes.
+`mujson` just uses the most performant JSON functions available, with the option to specify what JSON implementations are best for your project. It may also be of use to developers who don't always want to worry about compiling C extensions, but still want performance in production.
 
 ## usage
 
@@ -20,17 +20,17 @@ import mujson as json
 json.loads(json.dumps({'hello': 'world!'}))
 ```
 
-To customize the ranked order of JSON libraries, or to protect against collision with other customized use of mujson at runtime:
+To customize the ranked preference of JSON libraries, including libraries not contemplated by `mujson`:
 
 ``` python
 from mujson import mujson_function
 
-FAST_JSON_LIBS = ['ujson', 'rapidjson', 'yajl']
+FAST_JSON_LIBS = ['newjsonlib', 'ujson', 'rapidjson', 'yajl']
 
 fast_dumps = mujson_function('fast_dumps', ranking=FAST_JSON_LIBS)
 ```
 
-`mujson` comes with one custom set of functions already implemented, using a ranking that excludes json libraries that do not support the function signatures supported by corresponding functions in the standard library. Consider:
+`mujson` implements one additional set of custom mujson functions, called "compliant". These functions use a ranking that excludes JSON libraries that do not support the function signatures supported by corresponding functions in the standard library.
 
 ```python
 import logging
@@ -41,14 +41,10 @@ from pythonjsonlogger import jsonlogger
 logger = logging.getLogger()
 
 logHandler = logging.StreamHandler()
-# NOTE: we use `compliant_dumps` here mainly because the `JsonFormmatter` makes
-# use of kwargs like `cls` and `default` which not all json libraries support.
-# This would NOT be an issue if this were the ONLY usage of mujson at runtime.
-# However, if there are other places in an application where `mujson.dumps` is
-# being used, we neither want to deny performance improvements which are
-# otherwise available to simple uses of `dumps` nor do we want to risk throwing
-# an error here if we go to use `dumps` and a non-compliant json function has
-# already been "negotiated" by mujson.
+# NOTE: we use `compliant_dumps` because the `JsonFormmatter` makes use of
+# kwargs like `cls` and `default` which not all json libraries support. (This
+# would not strictly be a concern if this was the only use of mujson in a given
+# application, but better safe than sorry.)
 formatter = jsonlogger.JsonFormatter(json_serializer=compliant_dumps)
 logHandler.setFormatter(formatter)
 logger.addHandler(logHandler)
@@ -56,30 +52,30 @@ logger.addHandler(logHandler)
 
 ## default rankings
 
-`mujson`'s default rankings are scoped to function (e.g. `loads`) and python version. They are based on benchmarked performance of different JSON libraries encoding and decoding the twitter data at [`bench/json/tweet.json`](bench/json/tweet.json).
+`mujson`'s default rankings are scoped to function and python version. The default rankings are based on the benchmarked performance of common JSON libraries encoding and decoding the JSON data at [`bench/json/tweet.json`](bench/json/tweet.json).
 
 ### python 2
 
-| library    | dumps | loads |
-|------------|:-----:|:-----:|
-| ujson      |  1st  |  1st  |
-| cjson      |  2nd  |  4th  |
-| simplejson |  3rd  |  6th  |
-| nssjson    |  4th  |  5th  |
-| yajl       |  5th  |  2nd  |
-| json       |  6th  |  3rd  |
+| library                                                | dumps |  dump | loads |  load | compliant |
+|--------------------------------------------------------|:-----:|:-----:|:-----:|:-----:|:---------:|
+| [ujson](https://github.com/esnme/ultrajson)            |  1st  |  1st  |  1st  |  1st  |     no    |
+| [cjson](https://github.com/AGProjects/python-cjson)    |  2nd  |  2nd  |  4th  |  4th  |     no    |
+| [simplejson](https://github.com/simplejson/simplejson) |  3rd  |  3rd  |  6th  |  6th  |    yes    |
+| [nssjson](https://github.com/lelit/nssjson)            |  4th  |  4th  |  5th  |  5th  |    yes    |
+| [yajl](https://github.com/rtyler/py-yajl)              |  5th  |  5th  |  2nd  |  2nd  |    yes    |
+| [json](https://docs.python.org/2/library/json.html)    |  6th  |  6th  |  3rd  |  3rd  |    yes    |
 
 ### python 3
 
-| library        | dumps | loads |
-|----------------|:-----:|:-----:|
-| metamagic.json |  1st  |       |
-| rapidjson      |  2nd  |  6th  |
-| ujson          |  3rd  |  1st  |
-| yajl           |  4th  |  2nd  |
-| json           |  5th  |  3rd  |
-| simplejson     |  6th  |  5th  |
-| nssjson        |  7th  |  4th  |
+| library                                                           | dumps |  dump | loads |  load | compliant |
+|-------------------------------------------------------------------|:-----:|:-----:|:-----:|:-----:|:---------:|
+| [metamagic.json](https://github.com/sprymix/metamagic.json)       |  1st  |       |       |       |     no    |
+| [rapidjson](https://github.com/python-rapidjson/python-rapidjson) |  2nd  |  1st  |  6th  |  6th  |    yes    |
+| [ujson](https://github.com/esnme/ultrajson)                       |  3rd  |  2nd  |  1st  |  1st  |     no    |
+| [yajl](https://github.com/rtyler/py-yajl)                         |  4th  |  3rd  |  2nd  |  2nd  |    yes    |
+| [json](https://docs.python.org/3.6/library/json.html)             |  5th  |  4th  |  3rd  |  3rd  |    yes    |
+| [simplejson](https://github.com/simplejson/simplejson)            |  6th  |  5th  |  5th  |  5th  |    yes    |
+| [nssjson](https://github.com/lelit/nssjson)                       |  7th  |  6th  |  4th  |  4th  |    yes    |
 
 ## running benchmarks
 
@@ -127,3 +123,7 @@ mujson          de/encoded apache.json 1000 times in 1608.914870001172 milliseco
 
 ***************************************************************************
 ```
+
+---
+
+_In computability theory, the **μ** operator, minimization operator, or unbounded search operator searches for the least natural number with a given property._
