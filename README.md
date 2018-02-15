@@ -12,7 +12,7 @@ $ pip install mujson
 
 ## rationale
 
-JSON decoding and encoding is a common application bottleneck, and a variety of "fast" substitutes for the standard library's `json` exist, typically implemented in C. This is great for projects which can fine tune their dependency trees, but third party libraries are often forced to rely on the standard library so as to avoid superfluous or expensive dependencies.
+JSON decoding and encoding is a common application bottleneck, and a variety of "fast" substitutes for the standard library's `json` exist, typically implemented in C. This is great for projects which can fine tune their dependency trees, but third party libraries are often forced to rely on the standard library so as to avoid superfluous or expensive requirements.
 
 It is common for libraries to use `try... except` logic around imports, hoping to find some better JSON implementation available. But this approach is sub-optimal. There are many python JSON libraries, and the relative performance of these varies between encoding and decoding, as well as between Python 2 and 3.
 
@@ -67,11 +67,11 @@ logger.addHandler(logHandler)
 | library                                                | dumps |  dump | loads |  load | compliant |
 |--------------------------------------------------------|:-----:|:-----:|:-----:|:-----:|:---------:|
 | [ujson](https://github.com/esnme/ultrajson)            |  1st  |  1st  |  1st  |  1st  |     no    |
-| [cjson](https://github.com/AGProjects/python-cjson)    |  2nd  |  2nd  |  4th  |  4th  |     no    |
-| [simplejson](https://github.com/simplejson/simplejson) |  3rd  |  3rd  |  6th  |  6th  |    yes    |
-| [nssjson](https://github.com/lelit/nssjson)            |  4th  |  4th  |  5th  |  5th  |    yes    |
-| [yajl](https://github.com/rtyler/py-yajl)              |  5th  |  5th  |  2nd  |  2nd  |    yes    |
-| [json](https://docs.python.org/2/library/json.html)    |  6th  |  6th  |  3rd  |  3rd  |    yes    |
+| [cjson](https://github.com/AGProjects/python-cjson)    |  2nd  |       |  4th  |       |     no    |
+| [simplejson](https://github.com/simplejson/simplejson) |  3rd  |  2nd  |  6th  |  5th  |    yes    |
+| [nssjson](https://github.com/lelit/nssjson)            |  4th  |  3rd  |  5th  |  4th  |    yes    |
+| [yajl](https://github.com/rtyler/py-yajl)              |  5th  |  4th  |  2nd  |  2nd  |    yes    |
+| [json](https://docs.python.org/2/library/json.html)    |  6th  |  5th  |  3rd  |  3rd  |    yes    |
 
 ### python 3
 

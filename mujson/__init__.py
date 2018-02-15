@@ -70,9 +70,9 @@ if sys.version_info.major == 3:
 
 else:
     DEFAULT_RANKINGS = {
-        'dump': [ujson, yajl, json, cjson, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'dump': [ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
         'dumps': [ujson, yajl, json, cjson, nssjson, simplejson, nssjson_slow, simplejson_slow],
-        'load': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow],
+        'load': [ujson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow],
         'loads': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow]}
 
 
