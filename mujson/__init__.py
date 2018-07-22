@@ -162,13 +162,13 @@ def mujson_function(name, alias_for=None, ranking=None):
     return temp_json_func
 
 
-dump = mujson_function('dump', ranking=DEFAULT_RANKINGS['dump'])
+dump = mujson_function('dump')
 
-dumps = mujson_function('dumps', ranking=DEFAULT_RANKINGS['dumps'])
+dumps = mujson_function('dumps')
 
-load = mujson_function('load', ranking=DEFAULT_RANKINGS['load'])
+load = mujson_function('load')
 
-loads = mujson_function('loads', ranking=DEFAULT_RANKINGS['loads'])
+loads = mujson_function('loads')
 
 
 # NOTE(mattgiles): programmers can elect to explicitly import `compliant_*`
@@ -181,18 +181,20 @@ loads = mujson_function('loads', ranking=DEFAULT_RANKINGS['loads'])
 # varying signatures.
 NON_COMPLIANT = [ujson, cjson, mjson]
 
+is_compliant = lambda x: x not in NON_COMPLIANT
+
 compliant_dump = mujson_function(
     'compliant_dump',
-    ranking=[m for m in DEFAULT_RANKINGS['dump'] if m not in NON_COMPLIANT])
+    ranking=filter(is_compliant, DEFAULT_RANKINGS['dump']))
 
 compliant_dumps = mujson_function(
     'compliant_dumps',
-    ranking=[m for m in DEFAULT_RANKINGS['dumps'] if m not in NON_COMPLIANT])
+    ranking=filter(is_compliant, DEFAULT_RANKINGS['dumps']))
 
 compliant_load = mujson_function(
     'compliant_load',
-    ranking=[m for m in DEFAULT_RANKINGS['load'] if m not in NON_COMPLIANT])
+    ranking=filter(is_compliant, DEFAULT_RANKINGS['load']))
 
 compliant_loads = mujson_function(
     'compliant_loads',
-    ranking=[m for m in DEFAULT_RANKINGS['loads'] if m not in NON_COMPLIANT])
+    ranking=filter(is_compliant, DEFAULT_RANKINGS['loads']))
