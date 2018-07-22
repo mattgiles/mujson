@@ -59,9 +59,26 @@ try:
 except ImportError:
     mjson = False
 
+try:
+    pypy = sys.pypy_version_info is not None
+except AttributeError:
+    pypy = False
 
-if sys.version_info.major == 3:
+try:
+    assert basestring is not None
+except NameError:
     basestring = str
+
+if pypy:
+    # NOTE(mattgiles): in benchmarks, using pypy, the standard library's json
+    # module outperforms all third party libraries.
+    DEFAULT_RANKINGS = {
+        'dump': [],
+        'dumps': [],
+        'load': [],
+        'loads': []}
+
+elif sys.version_info.major == 3:
     DEFAULT_RANKINGS = {
         'dump': [rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
         'dumps': [mjson, rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],

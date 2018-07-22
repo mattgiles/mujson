@@ -6,7 +6,7 @@ from timeit import Timer
 _import_tpl = 'from {} import (dumps, loads)'
 
 
-_bin_tmpl = "bin = open('json/{}', 'rb').read()"
+_bin_tmpl = "bin = open('json/{}', 'r').read()"
 
 
 _obj = "obj = loads(bin)"
