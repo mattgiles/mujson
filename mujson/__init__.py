@@ -93,6 +93,16 @@ else:
         'loads': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow]}
 
 
+def _get_kwarg_names(func):
+    try:
+        # NOTE(mattgiles): there are compatibility issues between Python2 and
+        # Python3 when using `inspect.getargspec`. Here we elect to try
+        # Python3-compliant code first, falling back to Python2.
+        return inspect.getfullargspec(func).kwonlyargs
+    except AttributeError:
+        return inspect.getargspec(func)[0]
+
+
 def _best_available_json_func(func_name, ranking, **kwargs):
     _available = []
     for module in ranking:
@@ -114,7 +124,7 @@ def _best_available_json_func(func_name, ranking, **kwargs):
     for module in _available:
         try:
             func = getattr(module, func_name)
-            if set(kwargs.keys()).issubset(inspect.getargspec(func)[0]):
+            if set(kwargs.keys()).issubset(_get_kwarg_names(func)):
                 return func
         except (AttributeError, TypeError, ValueError):
             continue
