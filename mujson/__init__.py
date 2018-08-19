@@ -5,7 +5,7 @@ import json
 import sys
 
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 
 SUPPORTED_FUNCS = ['loads', 'load', 'dumps', 'dump']
@@ -93,6 +93,16 @@ else:
         'loads': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow]}
 
 
+def _get_kwarg_names(func):
+    try:
+        # NOTE(mattgiles): there are compatibility issues between Python2 and
+        # Python3 when using `inspect.getargspec`. Here we elect to try
+        # Python3-compliant code first, falling back to Python2.
+        return inspect.getfullargspec(func).kwonlyargs
+    except AttributeError:
+        return inspect.getargspec(func)[0]
+
+
 def _best_available_json_func(func_name, ranking, **kwargs):
     _available = []
     for module in ranking:
@@ -114,7 +124,7 @@ def _best_available_json_func(func_name, ranking, **kwargs):
     for module in _available:
         try:
             func = getattr(module, func_name)
-            if set(kwargs.keys()).issubset(inspect.getargspec(func)[0]):
+            if set(kwargs.keys()).issubset(_get_kwarg_names(func)):
                 return func
         except (AttributeError, TypeError, ValueError):
             continue
@@ -198,20 +208,18 @@ loads = mujson_function('loads')
 # varying signatures.
 NON_COMPLIANT = [ujson, cjson, mjson]
 
-is_compliant = lambda x: x not in NON_COMPLIANT
-
 compliant_dump = mujson_function(
     'compliant_dump',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['dump']))
+    ranking=[m for m in DEFAULT_RANKINGS['dump'] if m not in NON_COMPLIANT])
 
 compliant_dumps = mujson_function(
     'compliant_dumps',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['dumps']))
+    ranking=[m for m in DEFAULT_RANKINGS['dumps'] if m not in NON_COMPLIANT])
 
 compliant_load = mujson_function(
     'compliant_load',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['load']))
+    ranking=[m for m in DEFAULT_RANKINGS['load'] if m not in NON_COMPLIANT])
 
 compliant_loads = mujson_function(
     'compliant_loads',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['loads']))
+    ranking=[m for m in DEFAULT_RANKINGS['loads'] if m not in NON_COMPLIANT])

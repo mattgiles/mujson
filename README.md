@@ -85,6 +85,10 @@ logger.addHandler(logHandler)
 | [simplejson](https://github.com/simplejson/simplejson)            |  6th  |  5th  |  5th  |  5th  |    yes    |
 | [nssjson](https://github.com/lelit/nssjson)                       |  7th  |  6th  |  4th  |  4th  |    yes    |
 
+### PyPy
+
+When [PyPy](https://pypy.org/) is used, `mujson` simply falls back to the standard library's `json`, as it currently outperforms all third party libaries.
+
 ## running benchmarks
 
 You can build the python 3 benchmarking environment with something like:
