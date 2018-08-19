@@ -5,7 +5,7 @@ import json
 import sys
 
 
-__version__ = '1.2'
+__version__ = '1.3'
 
 
 SUPPORTED_FUNCS = ['loads', 'load', 'dumps', 'dump']
@@ -100,7 +100,7 @@ def _get_kwarg_names(func):
         # Python27-compliant code first, falling back to Python36. This order
         # is important because of the behavior of intermediate Python versions.
         return inspect.getargspec(func)[0]
-    except AttributeError:
+    except (AttributeError, TypeError, ValueError):
         return inspect.getfullargspec(func).kwonlyargs
 
 
