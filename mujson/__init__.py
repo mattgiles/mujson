@@ -5,7 +5,7 @@ import json
 import sys
 
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 
 SUPPORTED_FUNCS = ['loads', 'load', 'dumps', 'dump']
@@ -97,10 +97,11 @@ def _get_kwarg_names(func):
     try:
         # NOTE(mattgiles): there are compatibility issues between Python2 and
         # Python3 when using `inspect.getargspec`. Here we elect to try
-        # Python3-compliant code first, falling back to Python2.
-        return inspect.getfullargspec(func).kwonlyargs
-    except AttributeError:
+        # Python27-compliant code first, falling back to Python36. This order
+        # is important because of the behavior of intermediate Python versions.
         return inspect.getargspec(func)[0]
+    except AttributeError:
+        return inspect.getfullargspec(func).kwonlyargs
 
 
 def _best_available_json_func(func_name, ranking, **kwargs):
