@@ -208,20 +208,18 @@ loads = mujson_function('loads')
 # varying signatures.
 NON_COMPLIANT = [ujson, cjson, mjson]
 
-is_compliant = lambda x: x not in NON_COMPLIANT
-
 compliant_dump = mujson_function(
     'compliant_dump',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['dump']))
+    ranking=[m for m in DEFAULT_RANKINGS['dump'] if m not in NON_COMPLIANT])
 
 compliant_dumps = mujson_function(
     'compliant_dumps',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['dumps']))
+    ranking=[m for m in DEFAULT_RANKINGS['dumps'] if m not in NON_COMPLIANT])
 
 compliant_load = mujson_function(
     'compliant_load',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['load']))
+    ranking=[m for m in DEFAULT_RANKINGS['load'] if m not in NON_COMPLIANT])
 
 compliant_loads = mujson_function(
     'compliant_loads',
-    ranking=filter(is_compliant, DEFAULT_RANKINGS['loads']))
+    ranking=[m for m in DEFAULT_RANKINGS['loads'] if m not in NON_COMPLIANT])
