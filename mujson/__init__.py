@@ -26,19 +26,17 @@ except ImportError:
 
 try:
     import simplejson  # https://github.com/simplejson/simplejson
-    if simplejson.encoder.c_make_encoder:
-        simplejson_slow = False
-    else:
-        simplejson_slow, simplejson = simplejson, False
+    simplejson_slow = False
+    if not simplejson.encoder.c_make_encoder:
+        simplejson, simplejson_slow = simplejson_slow, simplejson
 except ImportError:
     simplejson = simplejson_slow = False
 
 try:
     import nssjson  # https://github.com/lelit/nssjson
-    if nssjson.encoder.c_make_encoder:
-        nssjson_slow = False
-    else:
-        nssjson_slow, nssjson = nssjson, False
+    nssjson_slow = False
+    if not nssjson.encoder.c_make_encoder:
+        nssjson, nssjson_slow = nssjson_slow, nssjson
 except ImportError:
     nssjson = nssjson_slow = False
 
