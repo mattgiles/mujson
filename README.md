@@ -7,14 +7,14 @@
 Install with:
 
 ``` shell
-$ pip install mujson
+$ pip install --upgrade mujson
 ```
 
 ## rationale
 
 JSON decoding and encoding is a common application bottleneck, and a variety of "fast" substitutes for the standard library's `json` exist, typically implemented in C. This is great for projects which can fine tune their dependency trees, but third party libraries are often forced to rely on the standard library so as to avoid superfluous or expensive requirements.
 
-It is common for libraries to use `try... except` logic around imports, hoping to find some better JSON implementation available. But this approach is sub-optimal. There are many python JSON libraries, and the relative performance of these varies between encoding and decoding, as well as between Python 2 and 3.
+It is common for libraries to use guarded imports (i.e. `try... except` logic), hoping to find some better JSON implementation available. But this approach is sub-optimal. There are many python JSON libraries, and the relative performance of these varies between encoding and decoding, as well as between Python 2 and 3.
 
 `mujson` just uses the most performant JSON functions available, with the option to specify what JSON implementations are best for your project. It may also be of use to developers who don't always want to worry about compiling C extensions, but still want performance in production.
 
@@ -33,7 +33,7 @@ To customize the ranked preference of JSON libraries, including libraries not co
 ``` python
 from mujson import mujson_function
 
-FAST_JSON_LIBS = ['newjsonlib', 'ujson', 'rapidjson', 'yajl']
+FAST_JSON_LIBS = ['newjsonlib', 'orjson', 'ujson', 'rapidjson', 'yajl']
 
 fast_dumps = mujson_function('fast_dumps', ranking=FAST_JSON_LIBS)
 ```
@@ -92,7 +92,7 @@ When [PyPy](https://pypy.org/) is used, `mujson` simply falls back to the standa
 
 ## running benchmarks
 
-You can build the python 3 benchmarking environment with something like:
+You can build the python 3 benchmarking environment from within the bench directory with something like:
 
 ``` shell
 $ docker build -t mujson-bench:py3 -f py3.Dockerfile .
