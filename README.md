@@ -60,30 +60,31 @@ logger.addHandler(logHandler)
 
 ## default rankings
 
-`mujson`'s default rankings are scoped to function and python version. The default rankings are based on the benchmarked performance of common JSON libraries encoding and decoding the JSON data at [`bench/json/tweet.json`](bench/json/tweet.json).
-
-### python 2
-
-| library                                                | dumps |  dump | loads |  load | compliant |
-|--------------------------------------------------------|:-----:|:-----:|:-----:|:-----:|:---------:|
-| [ujson](https://github.com/esnme/ultrajson)            |  1st  |  1st  |  1st  |  1st  |     no    |
-| [cjson](https://github.com/AGProjects/python-cjson)    |  2nd  |       |  4th  |       |     no    |
-| [simplejson](https://github.com/simplejson/simplejson) |  3rd  |  2nd  |  6th  |  5th  |    yes    |
-| [nssjson](https://github.com/lelit/nssjson)            |  4th  |  3rd  |  5th  |  4th  |    yes    |
-| [yajl](https://github.com/rtyler/py-yajl)              |  5th  |  4th  |  2nd  |  2nd  |    yes    |
-| [json](https://docs.python.org/2/library/json.html)    |  6th  |  5th  |  3rd  |  3rd  |    yes    |
+`mujson`'s default rankings are scoped to function and python version. The default rankings are based on the benchmarked performance of common JSON libraries encoding and decoding the JSON data in [bench/json](bench/json). [`bench/json/tweet.json`](bench/json/tweet.json) was given the most weight, under the assumption that it most closely resembles common application data.
 
 ### python 3
 
-| library                                                           | dumps |  dump | loads |  load | compliant |
-|-------------------------------------------------------------------|:-----:|:-----:|:-----:|:-----:|:---------:|
-| [metamagic.json](https://github.com/sprymix/metamagic.json)       |  1st  |       |       |       |     no    |
-| [rapidjson](https://github.com/python-rapidjson/python-rapidjson) |  2nd  |  1st  |  6th  |  6th  |    yes    |
-| [ujson](https://github.com/esnme/ultrajson)                       |  3rd  |  2nd  |  1st  |  1st  |     no    |
-| [yajl](https://github.com/rtyler/py-yajl)                         |  4th  |  3rd  |  2nd  |  2nd  |    yes    |
-| [json](https://docs.python.org/3.6/library/json.html)             |  5th  |  4th  |  3rd  |  3rd  |    yes    |
-| [simplejson](https://github.com/simplejson/simplejson)            |  6th  |  5th  |  5th  |  5th  |    yes    |
-| [nssjson](https://github.com/lelit/nssjson)                       |  7th  |  6th  |  4th  |  4th  |    yes    |
+| library                                                           | dumps | dump | loads | load | compliant |
+|:------------------------------------------------------------------|:-----:|:----:|:-----:|:----:|:---------:|
+| [orjson](https://github.com/ijl/orjson)                           |  1st  |      |  1st  |      |    no     |
+| [metamagic.json](https://github.com/sprymix/metamagic.json)       |  2nd  |      |       |      |    no     |
+| [ujson](https://github.com/esnme/ultrajson)                       |  4th  | 2nd  |  2nd  | 1st  |    no     |
+| [rapidjson](https://github.com/python-rapidjson/python-rapidjson) |  3rd  | 1st  |  4th  | 3rd  |    yes    |
+| [simplejson](https://github.com/simplejson/simplejson)            |  8th  | 6th  |  3rd  | 2nd  |    yes    |
+| [json](https://docs.python.org/3.6/library/json.html)             |  6th  | 4th  |  5th  | 4th  |    yes    |
+| [yajl](https://github.com/rtyler/py-yajl)                         |  5th  | 3rd  |  7th  | 6th  |    yes    |
+| [nssjson](https://github.com/lelit/nssjson)                       |  7th  | 5th  |  6th  | 5th  |    yes    |
+
+### python 2
+
+| library                                                | dumps | dump | loads | load | compliant |
+|:-------------------------------------------------------|:-----:|:----:|:-----:|:----:|:---------:|
+| [ujson](https://github.com/esnme/ultrajson)            |  1st  | 1st  |  2nd  | 1st  |    no     |
+| [cjson](https://github.com/AGProjects/python-cjson)    |  4th  |      |  1st  |      |    no     |
+| [yajl](https://github.com/rtyler/py-yajl)              |  2nd  | 2nd  |  5th  | 4th  |    yes    |
+| [simplejson](https://github.com/simplejson/simplejson) |  6th  | 5th  |  3rd  | 2nd  |    yes    |
+| [nssjson](https://github.com/lelit/nssjson)            |  5th  | 4th  |  4th  | 3rd  |    yes    |
+| [json](https://docs.python.org/2/library/json.html)    |  3rd  | 3rd  |  6th  | 5th  |    yes    |
 
 ### PyPy
 

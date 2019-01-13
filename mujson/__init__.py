@@ -84,8 +84,8 @@ if pypy:
 elif sys.version_info.major == 3:
     DEFAULT_RANKINGS = {
         'dump': [rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
-        'load': [ujson, yajl, json, nssjson, simplejson, rapidjson, nssjson_slow, simplejson_slow],
         'dumps': [orjson, mjson, rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'load': [ujson, simplejson, rapidjson, json, nssjson, yajl, nssjson_slow, simplejson_slow],
         'loads': [orjson, ujson, simplejson, rapidjson, json, nssjson, yajl, nssjson_slow, simplejson_slow]}
 
 else:
@@ -93,7 +93,7 @@ else:
         'dump': [ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
         'dumps': [ujson, yajl, json, cjson, nssjson, simplejson, nssjson_slow, simplejson_slow],
         'load': [ujson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow],
-        'loads': [ujson, cjson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow]}
+        'loads': [cjson, ujson, simplejson, nssjson, yajl, json, simplejson_slow, nssjson_slow]}
 
 
 def _get_kwarg_names(func):
