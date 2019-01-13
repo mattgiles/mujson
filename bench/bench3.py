@@ -3,6 +3,50 @@ import sys
 from timeit import Timer
 
 
+DECODE_TESTS = [
+    'yajl',
+    'nssjson',
+    'json',
+    'rapidjson',
+    'simplejson',
+    'ujson',
+    'mujson'
+]
+
+
+ENCODE_TESTS = [
+    'simplejson',
+    'nssjson',
+    'json',
+    'yajl',
+    'ujson',
+    'rapidjson',
+    'metamagic.json',
+    'mujson'
+]
+
+
+DECODE_ENCODE_TESTS = [
+    'nssjson',
+    'simplejson',
+    'yajl',
+    'json',
+    'rapidjson',
+    'ujson',
+    'mujson'
+]
+
+
+ACTIONS = {
+    'decoded': 'loads(bin)',
+    'encoded': 'dumps(obj)',
+    'de/encoded': 'dumps(loads(bin))'
+}
+
+
+ASCII_BREAK = '\n' + '*' * 75 + '\n'
+
+
 _import_tpl = 'from {} import (dumps, loads)'
 
 
@@ -15,73 +59,32 @@ _obj = "obj = loads(bin)"
 _warm_up = "loads(dumps([]))"
 
 
-decode_tests = [
-    'rapidjson',
-    'simplejson',
-    'nssjson',
-    'json',
-    'yajl',
-    'ujson',
-    'mujson'
-]
-
-
-encode_tests = [
-    'simplejson',
-    'nssjson',
-    'json',
-    'yajl',
-    'ujson',
-    'rapidjson',
-    'metamagic.json',
-    'mujson'
-]
-
-
-decode_encode_tests = [
-    'nssjson',
-    'simplejson',
-    'json',
-    'yajl',
-    'rapidjson',
-    'ujson',
-    'mujson'
-]
-
-
-actions = {
-    'decoded': 'loads(bin)',
-    'encoded': 'dumps(obj)',
-    'de/encoded': 'dumps(loads(bin))'
-}
-
-
 def timeit(mod, act, num, jsn, import_stmt):
     setup = [import_stmt, _warm_up, _bin_tmpl.format(jsn), _obj]
     try:
-        msecs = Timer(actions[act], '; '.join(setup)).timeit(num) * 1000
+        msecs = Timer(ACTIONS[act], '; '.join(setup)).timeit(num) * 1000
         print(f'{mod:15s} {act} {jsn} {num} times in {msecs} milliseconds!')
     except:
         print(f'{mod:15s} threw Exception trying to {act} {jsn} {num} times!')
 
 
 def main(number, jsn):
-    print('\n' + '*' * 75 + '\n')
+    print(ASCII_BREAK)
 
-    for mod in decode_tests:
-        timeit(mod, 'decoded', number, jsn, _import_tpl.format(mod))
+    for module in DECODE_TESTS:
+        timeit(module, 'decoded', number, jsn, _import_tpl.format(module))
 
-    print('\n' + '*' * 75 + '\n')
+    print(ASCII_BREAK)
 
-    for mod in encode_tests:
-        timeit(mod, 'encoded', number, jsn, _import_tpl.format(mod))
+    for module in ENCODE_TESTS:
+        timeit(module, 'encoded', number, jsn, _import_tpl.format(module))
 
-    print('\n' + '*' * 75 + '\n')
+    print(ASCII_BREAK)
 
-    for mod in decode_encode_tests:
-        timeit(mod, 'de/encoded', number, jsn, _import_tpl.format(mod))
+    for module in DECODE_ENCODE_TESTS:
+        timeit(module, 'de/encoded', number, jsn, _import_tpl.format(module))
 
-    print('\n' + '*' * 75 + '\n')
+    print(ASCII_BREAK)
 
 
 if __name__ == '__main__':
