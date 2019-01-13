@@ -1,15 +1,8 @@
-FROM alpine:3.7
+FROM python:2.7
 
-ENV BUILD_PKGS="g++ git musl-dev python2-dev yajl-dev" \
-    RUNTIME_PKGS="python2 yajl gcc" \
-    PIP_PKGS_COMPILE="ujson simplejson yajl python-cjson nssjson mujson"
+ENV PIP_PKGS="ujson simplejson yajl python-cjson nssjson mujson"
 
-RUN \
-  apk add --no-cache --virtual .build-deps $BUILD_PKGS && \
-  python -m ensurepip && \
-  pip install --compile $PIP_PKGS_COMPILE && \
-  apk del .build-deps && \
-  apk add --no-cache $RUNTIME_PKGS
+RUN pip install --upgrade --compile $PIP_PKGS
 
 COPY . /opt/bench
 
