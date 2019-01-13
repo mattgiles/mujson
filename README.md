@@ -101,38 +101,41 @@ $ docker build -t mujson-bench:py3 -f py3.Dockerfile .
 And you can run the benchmark against any of the provided json files:
 
 ``` text
-$ docker run -it mujson-bench:py3 1000 apache.json
+$ docker run -it mujson-bench:py3 10000 tweet.json
 
 ***************************************************************************
 
-rapidjson       decoded apache.json 1000 times in 1602.057653999509 milliseconds
-simplejson      decoded apache.json 1000 times in 1034.323225998378 milliseconds
-nssjson         decoded apache.json 1000 times in 1100.1701329987554 milliseconds
-json            decoded apache.json 1000 times in 1170.220017000247 milliseconds
-yajl            decoded apache.json 1000 times in 1224.6836369995435 milliseconds
-ujson           decoded apache.json 1000 times in 971.0670500026026 milliseconds
-mujson          decoded apache.json 1000 times in 966.8092329993669 milliseconds
+yajl            decoded tweet.json 10000 times in 559.8183549998339 milliseconds!
+nssjson         decoded tweet.json 10000 times in 435.359974999983 milliseconds!
+json            decoded tweet.json 10000 times in 399.63585400005286 milliseconds!
+rapidjson       decoded tweet.json 10000 times in 356.57377199981966 milliseconds!
+simplejson      decoded tweet.json 10000 times in 407.5520390001657 milliseconds!
+ujson           decoded tweet.json 10000 times in 350.63891499999045 milliseconds!
+orjson          decoded tweet.json 10000 times in 326.77353500002937 milliseconds!
+mujson          decoded tweet.json 10000 times in 372.2860130001209 milliseconds!
 
 ***************************************************************************
 
-simplejson      encoded apache.json 1000 times in 2175.9825850022025 milliseconds
-nssjson         encoded apache.json 1000 times in 2175.597892000951 milliseconds
-json            encoded apache.json 1000 times in 1711.0415339993779 milliseconds
-yajl            encoded apache.json 1000 times in 1038.154541998665 milliseconds
-ujson           encoded apache.json 1000 times in 789.5985149989428 milliseconds
-rapidjson       encoded apache.json 1000 times in 616.3629779985058 milliseconds
-metamagic.json  encoded apache.json 1000 times in 357.27883399886196 milliseconds
-mujson          encoded apache.json 1000 times in 364.98578699684003 milliseconds
+simplejson      encoded tweet.json 10000 times in 439.0100820000953 milliseconds!
+nssjson         encoded tweet.json 10000 times in 463.51910400017005 milliseconds!
+json            encoded tweet.json 10000 times in 317.38250700004755 milliseconds!
+yajl            encoded tweet.json 10000 times in 300.33104299991464 milliseconds!
+ujson           encoded tweet.json 10000 times in 247.8906360001929 milliseconds!
+rapidjson       encoded tweet.json 10000 times in 177.36121699999785 milliseconds!
+metamagic.json  encoded tweet.json 10000 times in 105.27558500007217 milliseconds!
+orjson          encoded tweet.json 10000 times in 71.5665820000595 milliseconds!
+mujson          encoded tweet.json 10000 times in 72.24357600011899 milliseconds!
 
 ***************************************************************************
 
-nssjson         de/encoded apache.json 1000 times in 3245.4301819998363 milliseconds
-simplejson      de/encoded apache.json 1000 times in 3285.083388000203 milliseconds
-json            de/encoded apache.json 1000 times in 2727.172070000961 milliseconds
-yajl            de/encoded apache.json 1000 times in 2573.481614999764 milliseconds
-rapidjson       de/encoded apache.json 1000 times in 2262.237699000252 milliseconds
-ujson           de/encoded apache.json 1000 times in 1749.4632090019877 milliseconds
-mujson          de/encoded apache.json 1000 times in 1608.914870001172 milliseconds
+nssjson         de/encoded tweet.json 10000 times in 991.1501950000456 milliseconds!
+simplejson      de/encoded tweet.json 10000 times in 940.1593679999678 milliseconds!
+yajl            de/encoded tweet.json 10000 times in 962.6767610000115 milliseconds!
+json            de/encoded tweet.json 10000 times in 824.6134749999783 milliseconds!
+rapidjson       de/encoded tweet.json 10000 times in 544.7737629999665 milliseconds!
+ujson           de/encoded tweet.json 10000 times in 588.3431380000275 milliseconds!
+orjson          de/encoded tweet.json 10000 times in 407.2712429999683 milliseconds!
+mujson          de/encoded tweet.json 10000 times in 410.43202300011217 milliseconds!
 
 ***************************************************************************
 ```
