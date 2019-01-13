@@ -10,6 +10,7 @@ DECODE_TESTS = [
     'rapidjson',
     'simplejson',
     'ujson',
+    'orjson',
     'mujson'
 ]
 
@@ -22,6 +23,7 @@ ENCODE_TESTS = [
     'ujson',
     'rapidjson',
     'metamagic.json',
+    'orjson',
     'mujson'
 ]
 
@@ -33,6 +35,7 @@ DECODE_ENCODE_TESTS = [
     'json',
     'rapidjson',
     'ujson',
+    'orjson',
     'mujson'
 ]
 

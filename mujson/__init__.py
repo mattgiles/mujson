@@ -60,6 +60,11 @@ except ImportError:
     mjson = False
 
 try:
+    import orjson  # https://github.com/ijl/orjson
+except ImportError:
+    orjson = False
+
+try:
     pypy = sys.pypy_version_info is not None
 except AttributeError:
     pypy = False
@@ -81,9 +86,9 @@ if pypy:
 elif sys.version_info.major == 3:
     DEFAULT_RANKINGS = {
         'dump': [rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
-        'dumps': [mjson, rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
         'load': [ujson, yajl, json, nssjson, simplejson, rapidjson, nssjson_slow, simplejson_slow],
-        'loads': [ujson, yajl, json, nssjson, simplejson, rapidjson, nssjson_slow, simplejson_slow]}
+        'dumps': [orjson, mjson, rapidjson, ujson, yajl, json, nssjson, simplejson, nssjson_slow, simplejson_slow],
+        'loads': [orjson, ujson, simplejson, rapidjson, json, nssjson, yajl, nssjson_slow, simplejson_slow]}
 
 else:
     DEFAULT_RANKINGS = {
@@ -207,7 +212,7 @@ loads = mujson_function('loads')
 # kwargs, this dynamic behavior can lead to NON-DETERMINISTIC behavior in
 # larger or more complex libraries where mujson is used multiple places with
 # varying signatures.
-NON_COMPLIANT = [ujson, cjson, mjson]
+NON_COMPLIANT = [ujson, cjson, mjson, orjson]
 
 compliant_dump = mujson_function(
     'compliant_dump',

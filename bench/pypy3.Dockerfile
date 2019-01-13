@@ -1,6 +1,6 @@
 FROM pypy:3
 
-ENV PIP_PKGS="ujson simplejson python-rapidjson yajl nssjson mujson"
+ENV PIP_PKGS="ujson simplejson python-rapidjson yajl nssjson mujson orjson"
 
 RUN pip install $PIP_PKGS
 
