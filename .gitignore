@@ -1,3 +1,5 @@
+/mujson/__version__.py
+
 *.pyc
 
 .vscode/*
