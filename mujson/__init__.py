@@ -3,6 +3,7 @@ import collections
 import inspect
 import json
 import sys
+import warnings
 
 
 __version__ = '1.4'
@@ -102,7 +103,8 @@ def _get_kwarg_names(func):
         # Python3 when using `inspect.getargspec`. Here we elect to try
         # Python27-compliant code first, falling back to Python36. This order
         # is important because of the behavior of intermediate Python versions.
-        return inspect.getargspec(func)[0]
+        with warnings.catch_warnings(DeprecationWarning):
+            return inspect.getargspec(func)[0]
     except (AttributeError, TypeError, ValueError):
         return inspect.getfullargspec(func).kwonlyargs
 
