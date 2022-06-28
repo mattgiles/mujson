@@ -5,7 +5,7 @@ import json
 import sys
 
 
-__version__ = '1.4'
+from .__version__ import version as __version__
 
 
 SUPPORTED_FUNCS = ['loads', 'load', 'dumps', 'dump']

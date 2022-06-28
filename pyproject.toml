@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.2.0", "wheel", "setuptools_scm[toml]>=3.4.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mujson"
+authors = [{name = "Matt Giles", email = "matt.s.giles@gmail.com"}]
+license = {text = "MIT"}
+description = "Use the fastest JSON functions available at import time."
+keywords = ["json"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+]
+urls = {Homepage = "https://github.com/mattgiles/mujson"}
+dynamic = ["version"]
+
+[tool.setuptools]
+packages = ["mujson"]
+zip-safe = false
+include-package-data = false
+platforms = ["any"]
+
+
+[tool.setuptools_scm]
+write_to = "mujson/__version__.py"
+
+[tool.distutils.bdist_wheel]
+universal = 1
